@@ -1,1 +1,106 @@
- 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>江南大院未来生态圈 - 愿望众筹平台</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+        }
+
+        textarea {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        #wish-list {
+            margin-top: 20px;
+        }
+
+        .wish {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>江南大院未来生态圈 - 愿望众筹平台</h1>
+    </header>
+    <main>
+        <form id="wish-form">
+            <label for="wish-input">写下你的愿望:</label>
+            <textarea id="wish-input" rows="4" required></textarea>
+            <button type="submit">提交愿望</button>
+        </form>
+        <div id="wish-list">
+            <h2>已提交的愿望</h2>
+        </div>
+    </main>
+    <script>
+        const wishForm = document.getElementById('wish-form');
+        const wishInput = document.getElementById('wish-input');
+        const wishList = document.getElementById('wish-list');
+
+        wishForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const wishText = wishInput.value;
+            if (wishText) {
+                const wishElement = document.createElement('div');
+                wishElement.classList.add('wish');
+                wishElement.textContent = wishText;
+                wishList.appendChild(wishElement);
+                wishInput.value = '';
+            }
+        });
+    </script>
+</body>
+
+</html> 
