@@ -30,7 +30,7 @@ body {
 
 /* 头部样式 */
 header {
-    background-image: linear-gradient(to right, rgba(245, 247, 242, 0.95), rgba(245, 247, 242, 0.8)), url('../images/garden-bg.jpg');
+    background-image: linear-gradient(to right, rgba(245, 247, 242, 0.95), rgba(245, 247, 242, 0.8));
     background-size: cover;
     background-position: center;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
