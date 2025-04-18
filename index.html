@@ -1,225 +1,126 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>江南大院未来生态圈 - 愿望众筹平台</title>
-    <style>
-        :root {
-            --primary-color: #4e7a51;
-            --secondary-color: #8cc084;
-            --accent-color: #b5c9a1;
-            --light-color: #f5f7f2;
-            --dark-color: #2c3e50;
-        }
-
-        body {
-            font-family: "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
-            background-color: var(--light-color);
-            margin: 0;
-            padding: 0;
-            color: var(--dark-color);
-            line-height: 1.6;
-        }
-
-        header {
-            background-color: var(--primary-color);
-            color: white;
-            text-align: center;
-            padding: 2rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 2rem;
-        }
-
-        header p {
-            margin: 1rem 0 0;
-            opacity: 0.9;
-        }
-
-        main {
-            padding: 2rem;
-            max-width: 800px;
-            margin: 2rem auto;
-            background-color: white;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-
-        .wish-form {
-            background-color: var(--light-color);
-            padding: 2rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        label {
-            font-weight: bold;
-            color: var(--dark-color);
-        }
-
-        textarea {
-            padding: 1rem;
-            border: 2px solid var(--accent-color);
-            border-radius: 8px;
-            font-size: 1rem;
-            resize: vertical;
-            min-height: 100px;
-            transition: border-color 0.3s ease;
-        }
-
-        textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
-
-        button {
-            padding: 1rem 2rem;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: var(--secondary-color);
-        }
-
-        #wish-list {
-            margin-top: 2rem;
-        }
-
-        #wish-list h2 {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .wish {
-            background-color: white;
-            border: 1px solid var(--accent-color);
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
-        }
-
-        .wish:hover {
-            transform: translateY(-2px);
-        }
-
-        .wish-meta {
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 0.5rem;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 2rem;
-            color: #666;
-        }
-
-        @media (max-width: 768px) {
-            main {
-                margin: 1rem;
-                padding: 1rem;
-            }
-
-            header {
-                padding: 1.5rem;
-            }
-
-            header h1 {
-                font-size: 1.5rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 </head>
-
 <body>
-    <header>
-        <h1>江南大院未来生态圈</h1>
-        <p>分享您对美好社区生活的期待与愿望</p>
-    </header>
-    <main>
-        <div class="wish-form">
-            <form id="wish-form">
-                <label for="wish-input">写下您的愿望:</label>
-                <textarea id="wish-input" rows="4" placeholder="请详细描述您对江南大院未来生活的期望..." required></textarea>
-                <button type="submit">提交愿望</button>
-            </form>
-        </div>
-        <div id="wish-list">
-            <h2>社区愿望墙</h2>
-            <div id="wishes-container">
-                <!-- 愿望将通过 JavaScript 动态添加 -->
+    <header class="bg-light py-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="text-primary">江南大院未来生态圈</h1>
+                    <p class="lead">分享您对美好社区生活的期待与愿望</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#wishModal">
+                        <i class="bi bi-plus-circle"></i> 添加新愿望
+                    </button>
+                </div>
             </div>
         </div>
-    </main>
-    <script>
-        const wishForm = document.getElementById('wish-form');
-        const wishInput = document.getElementById('wish-input');
-        const wishesContainer = document.getElementById('wishes-container');
+    </header>
 
-        // 从 localStorage 加载愿望
-        let wishes = JSON.parse(localStorage.getItem('wishes')) || [];
-
-        // 渲染所有愿望
-        function renderWishes() {
-            wishesContainer.innerHTML = '';
-            if (wishes.length === 0) {
-                wishesContainer.innerHTML = '<div class="empty-state">还没有人提交愿望，快来写下您的第一个愿望吧！</div>';
-                return;
-            }
-            wishes.forEach((wish, index) => {
-                const wishElement = document.createElement('div');
-                wishElement.classList.add('wish');
-                wishElement.innerHTML = `
-                    <div class="wish-content">${wish.text}</div>
-                    <div class="wish-meta">
-                        <span>提交时间：${new Date(wish.date).toLocaleString('zh-CN')}</span>
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2 class="mb-4">关于我们的愿景</h2>
+                    <p>江南大院未来生态圈致力于打造一个和谐、美好的社区生活环境。我们相信，每位居民的想法和建议都是社区发展的宝贵财富。</p>
+                    <p>通过这个平台，您可以分享您对未来社区生活的期待，无论是环境改善、文化活动、便民设施，还是邻里互助，我们都期待听到您的声音！</p>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">愿望统计</h3>
+                            <div class="chart-container">
+                                <canvas id="wishChart"></canvas>
+                            </div>
+                        </div>
                     </div>
-                `;
-                wishesContainer.appendChild(wishElement);
-            });
-        }
+                </div>
+            </div>
+        </div>
+    </section>
 
-        // 提交新愿望
-        wishForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const wishText = wishInput.value.trim();
-            if (wishText) {
-                const newWish = {
-                    text: wishText,
-                    date: new Date().toISOString()
-                };
-                wishes.unshift(newWish); // 添加到开头
-                localStorage.setItem('wishes', JSON.stringify(wishes));
-                wishInput.value = '';
-                renderWishes();
-            }
-        });
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">社区愿望墙</h2>
+            <div class="row" id="wishes-container">
+                <!-- 愿望卡片将通过JavaScript动态添加 -->
+            </div>
+        </div>
+    </section>
 
-        // 初始渲染
-        renderWishes();
-    </script>
+    <!-- 添加愿望的模态框 -->
+    <div class="modal fade" id="wishModal" tabindex="-1" aria-labelledby="wishModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="wishModalLabel">分享您的愿望</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="wishForm">
+                        <div class="mb-3">
+                            <label for="wishCategory" class="form-label">愿望类别</label>
+                            <select class="form-select" id="wishCategory" required>
+                                <option value="">请选择类别</option>
+                                <option value="环境改善">环境改善</option>
+                                <option value="文化活动">文化活动</option>
+                                <option value="便民设施">便民设施</option>
+                                <option value="邻里互助">邻里互助</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="wishTitle" class="form-label">愿望标题</label>
+                            <input type="text" class="form-control" id="wishTitle" placeholder="给您的愿望起个简短的标题" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="wishDescription" class="form-label">愿望描述</label>
+                            <textarea class="form-control" id="wishDescription" rows="4" placeholder="详细描述您对江南大院未来生活的期望..." required></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="userName" class="form-label">您的署名</label>
+                                <input type="text" class="form-control" id="userName" placeholder="您希望如何被称呼">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="userContact" class="form-label">联系方式（选填）</label>
+                                <input type="text" class="form-control" id="userContact" placeholder="电话、微信或邮箱">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="expectedDate" class="form-label">期待实现日期</label>
+                            <input type="date" class="form-control" id="expectedDate">
+                        </div>
+                        <div class="mb-3">
+                            <label for="contribution" class="form-label">您愿意为实现这个愿望贡献什么</label>
+                            <textarea class="form-control" id="contribution" rows="3" placeholder="例如：分享专业知识、组织活动、提供资源等..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="submitWish">提交愿望</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-4">
+        <div class="container text-center">
+            <p>© 2023 江南大院未来生态圈 | 共建美好家园</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/main.js"></script>
 </body>
-
 </html> 
