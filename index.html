@@ -1,105 +1,224 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>江南大院未来生态圈 - 愿望众筹平台</title>
     <style>
+        :root {
+            --primary-color: #4e7a51;
+            --secondary-color: #8cc084;
+            --accent-color: #b5c9a1;
+            --light-color: #f5f7f2;
+            --dark-color: #2c3e50;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+            background-color: var(--light-color);
             margin: 0;
             padding: 0;
+            color: var(--dark-color);
+            line-height: 1.6;
         }
 
         header {
-            background-color: #333;
+            background-color: var(--primary-color);
             color: white;
             text-align: center;
-            padding: 20px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        header p {
+            margin: 1rem 0 0;
+            opacity: 0.9;
         }
 
         main {
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 2rem auto;
             background-color: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .wish-form {
+            background-color: var(--light-color);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
         }
 
         form {
             display: flex;
             flex-direction: column;
+            gap: 1rem;
         }
 
         label {
-            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--dark-color);
         }
 
         textarea {
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
+            padding: 1rem;
+            border: 2px solid var(--accent-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
         }
 
         button {
-            padding: 10px;
-            background-color: #333;
+            padding: 1rem 2rem;
+            background-color: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 3px;
+            border-radius: 8px;
             cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
         }
 
         button:hover {
-            background-color: #555;
+            background-color: var(--secondary-color);
         }
 
         #wish-list {
-            margin-top: 20px;
+            margin-top: 2rem;
+        }
+
+        #wish-list h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
         }
 
         .wish {
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 3px;
+            background-color: white;
+            border: 1px solid var(--accent-color);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .wish:hover {
+            transform: translateY(-2px);
+        }
+
+        .wish-meta {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                margin: 1rem;
+                padding: 1rem;
+            }
+
+            header {
+                padding: 1.5rem;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
 
 <body>
     <header>
-        <h1>江南大院未来生态圈 - 愿望众筹平台</h1>
+        <h1>江南大院未来生态圈</h1>
+        <p>分享您对美好社区生活的期待与愿望</p>
     </header>
     <main>
-        <form id="wish-form">
-            <label for="wish-input">写下你的愿望:</label>
-            <textarea id="wish-input" rows="4" required></textarea>
-            <button type="submit">提交愿望</button>
-        </form>
+        <div class="wish-form">
+            <form id="wish-form">
+                <label for="wish-input">写下您的愿望:</label>
+                <textarea id="wish-input" rows="4" placeholder="请详细描述您对江南大院未来生活的期望..." required></textarea>
+                <button type="submit">提交愿望</button>
+            </form>
+        </div>
         <div id="wish-list">
-            <h2>已提交的愿望</h2>
+            <h2>社区愿望墙</h2>
+            <div id="wishes-container">
+                <!-- 愿望将通过 JavaScript 动态添加 -->
+            </div>
         </div>
     </main>
     <script>
         const wishForm = document.getElementById('wish-form');
         const wishInput = document.getElementById('wish-input');
-        const wishList = document.getElementById('wish-list');
+        const wishesContainer = document.getElementById('wishes-container');
 
-        wishForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const wishText = wishInput.value;
-            if (wishText) {
+        // 从 localStorage 加载愿望
+        let wishes = JSON.parse(localStorage.getItem('wishes')) || [];
+
+        // 渲染所有愿望
+        function renderWishes() {
+            wishesContainer.innerHTML = '';
+            if (wishes.length === 0) {
+                wishesContainer.innerHTML = '<div class="empty-state">还没有人提交愿望，快来写下您的第一个愿望吧！</div>';
+                return;
+            }
+            wishes.forEach((wish, index) => {
                 const wishElement = document.createElement('div');
                 wishElement.classList.add('wish');
-                wishElement.textContent = wishText;
-                wishList.appendChild(wishElement);
+                wishElement.innerHTML = `
+                    <div class="wish-content">${wish.text}</div>
+                    <div class="wish-meta">
+                        <span>提交时间：${new Date(wish.date).toLocaleString('zh-CN')}</span>
+                    </div>
+                `;
+                wishesContainer.appendChild(wishElement);
+            });
+        }
+
+        // 提交新愿望
+        wishForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const wishText = wishInput.value.trim();
+            if (wishText) {
+                const newWish = {
+                    text: wishText,
+                    date: new Date().toISOString()
+                };
+                wishes.unshift(newWish); // 添加到开头
+                localStorage.setItem('wishes', JSON.stringify(wishes));
                 wishInput.value = '';
+                renderWishes();
             }
         });
+
+        // 初始渲染
+        renderWishes();
     </script>
 </body>
 
